@@ -31,11 +31,19 @@
 
 <p>The first chunk of the program creates a dictionary of papers and a list of their respective references. The second chunk takes all of the references in that dictionary and creates a list of them, making sure none of the references repeat. Then the program constructs the list of lists and transforms it into a matrix. Finally, the program takes that matrix and returns the co-occurrence matrix.</p>
 
+<p><img src= "rows_memory.png" alt="Memory as a Function of Rows"></p>
+
 <p>This first graph has rows, or papers, on the x-axis and memory in megabytes on the y-axis. The graph is roughly linear, but it is unpredictable. Rows is also the variable the program currently uses to regulate its memory. If there was a better variable to use, then we could use that variable to reliably keep memory usage per user below a certain level.</p>
+
+<p><img src= "references_memory.png" alt="Memory as a Function of Unique References"></p>
 
 <p>The next graph still has memory on the y-axis, but now unique references, the length of the matrix rows rather than the amount of them, on the x-axis. This graph increases at an increasing rate, with small irregularities, but much less than memory as a function of rows. Why? The other graph was linear, while this graph is likely quadratic. The amount of unique references increases with rows, so shouldn’t this graph also be linear?</p>
 
+<p><img src= "rows_references.png" alt="Unique References as a Function of Rows"></p>
+
 <p>As this next graph shows, that is not the case. As rows increases, the increase in unique references decreases. Why? As you search up papers, they will, on average, have the same number of references. However, as you search up more papers, they are more likely to have the same reference as another paper, so the amount of unique references does not increase as much. Note that this graph is likely to be completely different for a different query. (For example, if we searched for “galaxy” instead of “star”.)</p>
+
+<p><img src= "matrix_memory.png" alt="Memory as a Function of Matrix Area"></p>
 
 <p>Here is a graph of memory as a function of matrix area. This graph strongly suggests the memory increases proportionally with matrix size. If we look back at the memory profile, we can see that the majority of the memory increase--around 96.5% of it--is in the creation of the matrix, so this graph makes sense. This graph also suggests that matrix area has the most direct influence on the memory usage, which makes sense, since the biggest jumps in the memory profile are during the creation of the matrix.</p>
 
