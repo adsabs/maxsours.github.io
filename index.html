@@ -27,7 +27,7 @@
 
 <p>After familiarizing myself with the code and Python itself, I downloaded and imported memory_profiler, a python module that goes through the code line by line and analyses that line’s memory usage. The data comes back in a file, so I had to parse the file and then use matplotlib to create graphs of the memory usage, and here is what it gave back to me for 1000 papers and the search term “star”.</p>
 
-<p><img src= Pictures/profiler_code alt="Program Code"></p>
+<p><img src= Pictures/profiler_code.png alt="Program Code"></p>
 
 <p>The first chunk of the program creates a dictionary of papers and a list of their respective references. The second chunk takes all of the references in that dictionary and creates a list of them, making sure none of the references repeat. Then the program constructs the list of lists and transforms it into a matrix. Finally, the program takes that matrix and returns the co-occurrence matrix.</p>
 
