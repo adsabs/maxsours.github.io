@@ -23,13 +23,13 @@
 
 <p>The ADS is a literature discovery platform. One of the features of the ADS is to generate groups of papers with similar topics based on their co-occurrences with each other, and right now, the code to find those co-occurrences takes 10-20x the amount of memory relative to normal operations. My task was to figure out why and how we can improve the service.</p>
 
-<p>When you search for papers, the application builds the paper network based on the amount of co-citations each paper has with each other. To do so, it constructs a matrix with papers on one axis and unique references on the other. With “0” if the paper does not have the reference and “1” if it does. Python sees a matrix as lists within a list, each list representing a row in the matrix, so the first part of the code creates lists within a list, then numpy converts the list into a matrix, then the regular matrix into a co-occurrence matrix. The co-occurrence matrix is then weighted by how often the references appear.</p>
+<p>When you search for papers, the application builds the paper network based on the amount of co-citations each paper has with each other. To do so, it constructs a matrix with papers on one axis and unique references on the other. With “0” if the paper does not have the reference and “1” if it does. Python sees a matrix as lists within a list, each list representing a row in the matrix, so the first part of the code creates lists within a list, then numpy converts the list into a matrix, then the regular matrix into a co-occurrence matrix. The co-occurrence matrix is then weighted by how often the references appear by subtracting a weights matrix from the co-occurrence matrix.</p>
 
 <p>After familiarizing myself with the code and Python itself, I downloaded and imported memory_profiler, a python module that goes through the code line by line and analyses that line’s memory usage. The data comes back in a file, so I had to parse the file and then use matplotlib to create graphs of the memory usage, and here is what it gave back to me for 1000 papers and the search term “star”.</p>
 
 <p><img src= "profiler_code.png" alt="Starting Code Profile"></p>
 
-<p>(Note that this code does not include the construction of the weights matrix.)</p>
+<p>(Note that this code does not include the construction of the weights matrix or the weighting of the co-occurrence matrix.)</p>
 
 <p>The first chunk of the program creates a dictionary of papers and a list of their respective references. The second chunk takes all of the references in that dictionary and creates a list of them, making sure none of the references repeat. Then the program constructs the list of lists and transforms it into a matrix. Finally, the program takes that matrix and returns the co-occurrence matrix.</p>
 
@@ -56,6 +56,10 @@
 <p>In the actual optimization, I converted all matrices to arrays, since arrays take less memory, are easier to work with, and can do matrix multiplication as well with numpy.dot. I shortened the creation of the paper-citation array from two steps to one. I also simplified the unique reference list from a dictionary to a list. I attempted to reduce the construction of the weights array from two steps to one, but the resulting memory usage was actually higher (~50MB) than it was before (two steps ~18MB each). Finally, I deleted the entries array, the transposition of the entries array, and the weights array when they were no longer needed so they would not take up extra memory. In all, my modifications reduced memory consumption from 83.6MB/query to 53.4MB/query, reducing memory usage by 36% (30.2MB/query).</p>
 
 <p><img src= "new_code.png" alt="Optimized Code Profile"></p>
+
+<p>Future work on this issue could be to enact my first suggestion--to limit queries by the size of the matrix they make. Note that this solution would require predicting the size of the matrix before constructing the matrix itself (since that would take more memory than limiting matrix size would prevent).</p>
+
+<p>Another task could be to more fully understand the code that constructs the weights in order to cut down on memory without accidently causing a huge memory spike such as those that happened when I tried to improve the weights.</p>
 
       <footer class="site-footer">
 
